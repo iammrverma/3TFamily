@@ -14,6 +14,10 @@ const employeeSchema = new mongoose.Schema({
     location: String,
   },
   salary: { type: Number },
+  image:{
+    type:String,
+    default :"https://via.placeholder.com/150"
+  }
 });
 
 const Employee = mongoose.model("Employee", employeeSchema);

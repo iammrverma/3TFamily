@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const employees = await Employee.find({});
-    res.send(employees);
+    res.render("employee/index", { employees });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -16,8 +16,10 @@ router.get("/", async (req, res) => {
 
 // Create a new employee
 router.post("/", async (req, res) => {
+  console.log(req.body);
   try {
-    const employee = new Employee(req.body.employee);
+    const employee = new Employee(req.body);
+    console.log(employee);
     await employee.save();
     res.status(201).send(employee);
   } catch (error) {

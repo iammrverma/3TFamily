@@ -1,0 +1,145 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-height: 100vh;
+}
+
+.container {
+  flex: 1;
+}
+
+.navbar {
+  background-color: white;
+
+  & .fa-compass {
+    color: #fe424d;
+  }
+
+  & .nav-link {
+    color: #222222 !important;
+  }
+}
+
+#newListingForm, #signupForm {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin-inline: auto;
+  border: 1px solid white;
+  gap: 1rem;
+
+  & input,
+  & textarea,
+  & button {
+    padding: 0.5rem 1rem;
+  }
+
+  & textarea {
+    resize: vertical;
+  }
+
+  & .btn {
+    background-color: #fe424d !important;
+    border: none !important;
+  }
+}
+
+/* Card */
+.card {
+  border: none !important;
+
+  & .card-img-top {
+    border-radius: 1rem !important;
+  }
+
+  & .card-body {
+    padding: 0 !important;
+    margin-top: 1rem;
+  }
+}
+
+/* Employees(index) */
+.exployees-grid {
+  display: grid;
+  justify-content: center;
+  gap: 3rem 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  padding: 2rem 0;
+
+  & a {
+    text-decoration: none;
+  }
+
+  & .card {
+    & .image {
+      height: 20rem !important;
+      width: 100% !important;
+      border-radius: 1rem !important;
+      overflow: hidden;
+      transition: box-shadow 0.5s ease;
+    }
+
+    & .card-img-top {
+      width: 100%;
+      height: 100%;
+      border-radius: 1rem !important;
+      transition: transform 0.5s ease;
+      object-fit: cover;
+      transform: scale(1.3);
+    }
+
+    &:hover .card-img-top {
+      transform: scale(1);
+    }
+
+    &:hover .image {
+      box-shadow: 0px 1px 20px 0px #0d0000ad !important;
+    }
+  }
+}
+
+/* Listing(show) */
+.listing {
+  & .card-img-top {
+    height: 40vh;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  & .options {
+    display: flex;
+  }
+  & .btn-dark {
+    background-color: #fe424d !important;
+    border: none !important;
+  }
+}
+
+/* Footer */
+.f-info {
+  display: flex;
+  /* height: 8rem; */
+  background-color: #ebebeb;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+
+  & .f-info-socials {
+    font-size: 1.2rem;
+  }
+
+  & .f-info-links a {
+    text-decoration: none;
+    color: #222222;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
