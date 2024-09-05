@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const employeeSchema = new mongoose.Schema({
+const memberSchema = new mongoose.Schema({
   name: { type: String, required: true, default: "Mr India" },
   email: { type: String, unique: true },
   phone: { type: String, required: true },
@@ -17,8 +17,9 @@ const employeeSchema = new mongoose.Schema({
   image:{
     type:String,
     default :"https://via.placeholder.com/150"
-  }
+  },
+  editAccess: {type:Boolean, default:false},
 });
 
-const Employee = mongoose.model("Employee", employeeSchema);
-module.exports = Employee;
+const Member = mongoose.model("Member", memberSchema);
+module.exports = Member;

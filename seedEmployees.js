@@ -1,7 +1,7 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 const { faker } = require("@faker-js/faker");
-const Employee = require("./models/employee");
+const Member = require("./models/member");
 
 // Connect to MongoDB
 const main = async (url) => await mongoose.connect(url);
@@ -12,10 +12,10 @@ main(process.env.DB_URL)
 
 // Function to create fake employees
 const createFakeEmployees = async () => {
-  const employees = [];
+  const members = [];
 
   for (let i = 0; i < 15; i++) {
-    const employee = new Employee({
+    const employee = new Member({
       name: faker.person.fullName(),
       email: faker.internet.email(),
       phone: faker.phone.number("+1-###-###-####"),
@@ -23,19 +23,19 @@ const createFakeEmployees = async () => {
       department: faker.commerce.department(),
       joinDate: faker.date.past(5),
       address: {
-        country: faker.address.country(),
-        state: faker.address.state(),
-        city: faker.address.city(),
-        location: faker.address.street(),
+        country: faker.location.country(),
+        state: faker.location.state(),
+        city: faker.location.city(),
+        location: faker.location.street(),
       },
       salary: faker.number.int({ min: 30000, max: 100000 }),
     });
 
-    employees.push(employee);
+    members.push(employee);
   }
 
-  await Employee.deleteMany({});
-  await Employee.insertMany(employees);
+  await Member.deleteMany({});
+  await Member.insertMany(members);
   console.log("15 fake employees have been added to the database");
 };
 

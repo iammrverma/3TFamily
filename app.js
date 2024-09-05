@@ -6,19 +6,14 @@ const helmet = require("helmet");
 const path = require("path");
 const mongoose = require("mongoose");
 
-const employeeRoute = require("./routes/employeeRoutes");
+const membersRoute = require("./routes/membersRoute");
 
 const app = express();
 const BASE_URL = process.env.BASE_URL || "http://localhost";
 const DB_URL = process.env.DB_URL || "mongodb://127.0.0.1:27017/3TFamily";
 const PORT = process.env.PORT || 8080;
 
-app.engine("ejs", ejsMate);
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
@@ -35,10 +30,10 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.render("index.ejs");
+  res.send("Welcome To 3T Family We are very happy to have you with us.");
 });
 
-app.use("/employees", employeeRoute);
+app.use("/members", membersRoute);
 
 const main = async (dbUrl) => {
   try {
