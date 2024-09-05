@@ -1,4 +1,4 @@
-require("dotenv").config();
+const dotenv = require("dotenv");
 const express = require("express");
 const methodOverride = require("method-override");
 const helmet = require("helmet");
@@ -7,9 +7,13 @@ const mongoose = require("mongoose");
 const membersRoute = require("./routes/membersRoute");
 
 const app = express();
+const envFile = '.env.development';
+dotenv.config({ path: envFile });
 const BASE_URL = process.env.BASE_URL || "http://localhost";
 const DB_URL = process.env.DB_URL || "mongodb://127.0.0.1:27017/3TFamily";
 const PORT = process.env.PORT || 8080;
+
+console.log(BASE_URL, DB_URL, PORT);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
