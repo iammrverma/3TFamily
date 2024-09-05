@@ -1,9 +1,7 @@
 require("dotenv").config();
 const express = require("express");
-const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
 const helmet = require("helmet");
-const path = require("path");
 const mongoose = require("mongoose");
 
 const membersRoute = require("./routes/membersRoute");
