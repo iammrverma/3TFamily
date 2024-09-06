@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const passportLocalMongoose = require("passport-local-mongoose");
 
 const memberSchema = new mongoose.Schema({
   name: { type: String, required: true, default: "Mr India" },
@@ -14,12 +15,14 @@ const memberSchema = new mongoose.Schema({
     location: String,
   },
   salary: { type: Number },
-  image:{
-    type:String,
-    default :"https://via.placeholder.com/150"
+  image: {
+    type: String,
+    default: "https://via.placeholder.com/150",
   },
-  editAccess: {type:Boolean, default:false},
+  editAccess: { type: Boolean, default: false },
 });
+
+memberSchema.plugin(passportLocalMongoose, { usernameField: "email" });
 
 const Member = mongoose.model("Member", memberSchema);
 module.exports = Member;
