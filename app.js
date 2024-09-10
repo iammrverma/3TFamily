@@ -4,7 +4,7 @@ require("dotenv").config({
       ? ".env.production"
       : ".env.development",
 });
-
+const cors = require("cors");
 const express = require("express");
 const methodOverride = require("method-override");
 const helmet = require("helmet");
@@ -31,6 +31,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(cookieParser(COOKIE_SECRET));
+const corsOptions = {
+  origin: process.env.CLIENT_URL || "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  credentials: true, // Allow credentials (cookies)
+};
+app.use(cors(corsOptions));
+
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -59,11 +66,15 @@ app.get("/", (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
+  console.log(req.body);
   try {
     const member = await Member.findOne({ email });
-    if (!member || !(await member.authenticate(password))) {
-      return res.status(401).send("Invalid credentials");
-    }
+    if (!member) return res.status(401).json({error:"Email not found"});
+  
+    const authResult = await member.authenticate(password);
+    if (!authResult || !authResult.user)
+      return res.status(401).json({error:"Invalid password!"});
+    
     const token = generateToken(member);
     res.cookie("jwt", token, {
       httpOnly: true,
@@ -77,7 +88,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/logout", (req, res) => {
+app.get("/logout", (req, res) => {
   res.clearCookie("jwt");
   res.send("Logged out");
 });
