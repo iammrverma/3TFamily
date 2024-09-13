@@ -1,6 +1,7 @@
 const express = require("express");
 
 const Member = require("../models/member"); // Model
+const { authorizeRole } = require("../middleware");
 
 const router = express.Router();
 
@@ -15,7 +16,7 @@ router.get("/", async (req, res) => {
 });
 
 // Create a new member
-router.post("/", async (req, res) => {
+router.post("/", authorizeRole(["HR"]), async (req, res) => {
   console.log(req.body);
   try {
     const member = new Member(req.body);
@@ -41,7 +42,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Update an member
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", authorizeRole(["HR", "Member"]), async (req, res) => {
   try {
     const member = await Member.findByIdAndUpdate(
       req.params.id,
@@ -61,13 +62,13 @@ router.patch("/:id", async (req, res) => {
 });
 
 // Delete an member
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authorizeRole(["HR"]), async (req, res) => {
   try {
     const member = await Member.findByIdAndDelete(req.params.id);
     if (!member) {
       return res.status(404).send("Not found");
     }
-    res.send(member);
+    res.status(200).send("Member Deleted");
   } catch (error) {
     res.status(500).send(error);
   }

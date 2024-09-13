@@ -4,34 +4,36 @@ require("dotenv").config({
       ? ".env.production"
       : ".env.development",
 });
+
 const mongoose = require("mongoose");
 const { faker } = require("@faker-js/faker");
-const Member = require("./models/member"); // Adjust the path as needed
-const passportLocalMongoose = require("passport-local-mongoose");
+const Member = require("./models/member");
 
 // Connect to MongoDB
-const main = async (url) => {
+const main = async (url, num) => {
   try {
     await mongoose.connect(url);
     console.log("Connected to database");
-    await createFakeEmployees(5); // Ensure employees are created after connection
+    await createFakeEmployees(num); // Ensure employees are created after connection
   } catch (error) {
     console.error("Error connecting to database:", error);
   } finally {
     mongoose.connection.close();
+    console.log("Database connection closed");
   }
 };
 
 // Function to create fake employees
 const createFakeEmployees = async (num) => {
+  await Member.deleteMany({});
   for (let i = 0; i < num; i++) {
     const email = faker.internet.email();
     const password = "helloworld";
-
+    const image = `https://picsum.photos/200?random=${i}`;
     const member = new Member({
       name: faker.person.fullName(),
       email: email,
-      phone: faker.phone.number("+1-###-###-####"),
+      phone: faker.phone.number("9#########"), // Adjust format as needed
       position: faker.person.jobTitle(),
       department: faker.commerce.department(),
       joinDate: faker.date.past(5),
@@ -42,6 +44,7 @@ const createFakeEmployees = async (num) => {
         location: faker.location.street(),
       },
       salary: faker.number.int({ min: 30000, max: 100000 }),
+      image: image,
     });
 
     try {
@@ -54,4 +57,4 @@ const createFakeEmployees = async (num) => {
 };
 
 // Run the main function with the database URL
-main(process.env.DB_URL);
+main(process.env.DB_URL, 10); // Example number of fake members to create

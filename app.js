@@ -22,7 +22,6 @@ const BASE_URL = process.env.BASE_URL || "http://localhost";
 const DB_URL = process.env.DB_URL || "mongodb://127.0.0.1:27017/3tfamily";
 const PORT = process.env.PORT || 3000;
 const COOKIE_SECRET = process.env.COOKIE_SECRET || "defaultSecret";
-const JWT_SECRET = process.env.JWT_SECRET || "defaultJwtSecret";
 
 console.log(BASE_URL, DB_URL, PORT);
 
@@ -58,6 +57,10 @@ passport.deserializeUser(Member.deserializeUser());
 app.use(passport.initialize());
 
 // Routes
+app.use((req, res, next)=>{
+  console.log(req.signedCookies.jwt);
+  next();
+})
 app.use("/members", authenticateJwt, membersRoute);
 
 app.get("/", (req, res) => {
@@ -75,14 +78,14 @@ app.post("/login", async (req, res) => {
     if (!authResult || !authResult.user)
       return res.status(401).json({error:"Invalid password!"});
     
-    const token = generateToken(member);
+    const {token, role, id} = generateToken(member);
     res.cookie("jwt", token, {
       httpOnly: true,
       signed: true,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       secure: process.env.NODE_ENV === "production", // Use secure cookies in production
     });
-    res.send(`Login successful: ${token}`);
+    res.status(200).send({role, id});
   } catch (error) {
     res.status(500).send("Server error");
   }
