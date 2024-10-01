@@ -7,9 +7,18 @@ const router = express.Router();
 
 // Get all members
 router.get("/", async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 15;
+  const skip = (page - 1) * limit;
   try {
-    const members = await Member.find({});
-    res.send(members);
+    const totalMembers = await Member.countDocuments();
+    const members = await Member.find({}).skip(skip).limit(limit);
+    res.status(200).json({
+      totalMembers,
+      members,
+      currentPage: page,
+      totalPages: Math.ceil(totalMembers / limit),
+    });
   } catch (error) {
     res.status(500).send(error);
   }
